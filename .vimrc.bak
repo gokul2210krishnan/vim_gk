@@ -60,6 +60,10 @@ nnoremap <leader>t :NERDTree<CR>
 nmap <D-/> i#<Esc>
 vmap <D-/> I#<Esc>
 
+function! GetBranchNameOld()
+      let branch = system("git rev-parse --abbrev-ref HEAD")
+        return branch
+endfunction
 function! GitBranch()
   let current_file = expand("%:p")
   if stridx(current_file, "such file or directory") >= 0
@@ -73,12 +77,23 @@ function! GitBranch()
   let branch = system("cd " . dir . " && git rev-parse --abbrev-ref HEAD> /dev/null | tr -d '\n'")
   return branch
 endfunction
+function! GitBranchOld()
+  let l:root = system("git rev-parse --show-toplevel 2> /dev/null")
+  if l:root == ""
+    return "not a git repo"
+  endif
+
+  let l:branch = system("git rev-parse --abbrev-ref HEAD 2> /dev/null | tr -d '\n'")
+  return l:branch
+  " return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
 
 function! StatuslineGit()
   let l:branchname = GitBranch()
   return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
 endfunction
 
+"Have a Good Day,\nRemember to check the buffer ( , + b ) before doing anything
 set laststatus=2
 
 set statusline=
