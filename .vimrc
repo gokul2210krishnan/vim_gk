@@ -59,10 +59,7 @@ nnoremap <leader>z :FZF<CR>
 nnoremap <leader>t :NERDTree<CR>
 nmap <D-/> i#<Esc>
 vmap <D-/> I#<Esc>
-echo system("git rev-parse --abbrev-ref HEAD")
-let cfile = expand("%:p")
-let dir = fnamemodify(cfile , ":h")
-echo dir
+
 function! GetBranchNameOld()
       let branch = system("git rev-parse --abbrev-ref HEAD")
         return branch
@@ -77,7 +74,7 @@ function! GitBranch()
   if l:root == ""
     return "[no git repo]"
   endif
-  let branch = system("cd " . dir . " && git rev-parse --abbrev-ref HEAD")
+  let branch = system("cd " . dir . " && git rev-parse --abbrev-ref HEAD> /dev/null | tr -d '\n'")
   return branch
 endfunction
 function! GitBranchOld()
